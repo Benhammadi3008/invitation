@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invitation Mariage</title>
 
+<link rel="icon" type="image/png" href="favicon.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
+
+/* ================= BODY ================= */
 body{
     margin:0;
     background:#efe8de;
@@ -15,12 +20,13 @@ body{
     display:flex;
     justify-content:center;
     padding:30px;
-    background-image: url(./wedding-bouquet-with-pink-flowers-gold-rings.jpg);
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-size: cover; 
+    background-image:url('./wedding-bouquet-with-pink-flowers-gold-rings.jpg');
+    background-size:cover;
+    background-position:center;
+    overflow:hidden;
 }
 
+/* ================= INVITATION ================= */
 .invitation{
     width:800px;
     max-width:95%;
@@ -29,209 +35,288 @@ body{
     border-radius:25px;
     padding:50px;
     text-align:center;
-    position:relative;
-    box-shadow:0 0 25px rgba(0,0,0,0.15);
+    box-shadow:0 0 30px rgba(0,0,0,0.25);
+    opacity:0;
+    transform:scale(0.95);
+    transition:1s ease;
 }
 
-.family{
-    font-size:26px;
-    margin-bottom:5px;
+.invitation.show{
+    opacity:1;
+    transform:scale(1);
 }
 
-.family-name{
-    font-size:64px;
-    color:#5b0013;
-    font-weight:700;
-    text-transform:uppercase;
-}
-
-.subtitle{
-    font-size:28px;
-    margin-top:15px;
-}
+/* TEXT */
+.family{ font-size:26px; }
+.family-name{ font-size:64px; color:#5b0013; font-weight:700; }
+.subtitle{ font-size:28px; margin-top:15px; }
 
 .bride{
-    font-family:'Great Vibes', cursive;
-    color:#5b0013;
+    font-family:'Great Vibes';
     font-size:120px;
-    line-height:1;
+    color:#5b0013;
     margin:20px 0;
 }
 
-.info-section{
-    margin-top:30px;
-}
-
-.date{
-    font-size:60px;
-    color:#5b0013;
-    font-weight:bold;
-}
-
-.location-title{
-    margin-top:30px;
-    font-size:28px;
-}
+.date{ font-size:60px; color:#5b0013; font-weight:bold; }
 
 .location-name{
-    font-family:'Great Vibes', cursive;
+    font-family:'Great Vibes';
     font-size:70px;
     color:#5b0013;
 }
 
-.city{
-    font-size:36px;
-}
-
-.message{
-    margin-top:40px;
-    font-size:26px;
-}
-
-.maps-btn{
-    display:inline-block;
-    margin-top:25px;
-    background:#5b0013;
-    color:white;
-    text-decoration:none;
-    padding:15px 35px;
-    border-radius:40px;
-    font-size:22px;
-    transition:0.3s;
-}
-
-.maps-btn:hover{
-    background:#7d0020;
-    transform:scale(1.05);
-}
+.message{ margin-top:40px; font-size:26px; }
 
 .footer{
     margin-top:40px;
-    font-family:'Great Vibes', cursive;
+    font-family:'Great Vibes';
     font-size:40px;
-    color:#5b0013;
 }
 
-/* =========================
-   RESPONSIVE MOBILE
-========================= */
-@media (max-width: 768px) {
+/* ================= GIFT ================= */
+.gift-overlay{
+    position:fixed;
+    inset:0;
+    background:#efe8de;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+    cursor:pointer;
+}
 
-    body{
-        padding:15px;
-    }
+.gift-box{
+    font-size:90px;
+    animation:bounce 1.5s infinite;
+}
 
-    .invitation{
-        padding:25px 18px;
-        border-radius:18px;
-    }
+.gift-text{
+    margin-top:20px;
+    font-size:22px;
+}
 
-    .family{
-        font-size:18px;
-    }
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-15px);}
+}
 
-    .family-name{
-        font-size:34px;
-    }
+.gift-overlay.hide{
+    opacity:0;
+    transition:0.8s ease;
+    pointer-events:none;
+}
 
-    .subtitle{
-        font-size:18px;
-    }
+/* ================= RIBBON ================= */
+.ribbon{
+    position:fixed;
+    inset:0;
+    z-index:9998;
+    pointer-events:none;
+    transition:opacity 0.8s ease;
+}
 
-    .bride{
-        font-size:60px;
-        margin:15px 0;
-    }
+.ribbon::before,
+.ribbon::after{
+    content:"";
+    position:absolute;
+    background:#c9a54c;
+    animation:openRibbon 1s forwards;
+}
 
-    .date{
-        font-size:32px;
-    }
+.ribbon::before{
+    top:50%;
+    left:0;
+    width:100%;
+    height:3px;
+    transform:scaleX(0);
+}
 
-    .location-title{
-        font-size:20px;
-    }
+.ribbon::after{
+    left:50%;
+    top:0;
+    width:3px;
+    height:100%;
+    transform:scaleY(0);
+}
 
-    .location-name{
-        font-size:42px;
-    }
+@keyframes openRibbon{
+    to{ transform:scale(1); }
+}
 
-    .city{
-        font-size:22px;
-    }
+/* ================= CONFETTI ================= */
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:-10px;
+    z-index:9999;
+    animation:fall linear forwards;
+}
 
-    .message{
-        font-size:18px;
-        margin-top:25px;
-    }
-
-    .maps-btn{
-        font-size:16px;
-        padding:12px 22px;
-    }
-
-    .footer{
-        font-size:22px;
-        margin-top:25px;
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:0;
     }
 }
+
+/* ================= PETALS ================= */
+.petal{
+    position:fixed;
+    top:-10px;
+    width:12px;
+    height:12px;
+    background:pink;
+    border-radius:50% 0 50% 50%;
+    opacity:0.8;
+    z-index:999;
+    animation:fallPetal linear forwards;
+}
+
+@keyframes fallPetal{
+    to{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+/* ================= RING ================= */
+.ring{
+    position:fixed;
+    top:20px;
+    right:20px;
+    font-size:50px;
+    animation:rotateRing 3s linear infinite;
+    z-index:10000;
+}
+
+@keyframes rotateRing{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:768px){
+
+body{ padding:15px; }
+
+.invitation{ padding:25px; }
+
+.family{ font-size:18px; }
+.family-name{ font-size:34px; }
+.subtitle{ font-size:18px; }
+
+.bride{ font-size:60px; }
+
+.date{ font-size:32px; }
+
+.location-name{ font-size:42px; }
+
+.message{ font-size:18px; }
+
+.footer{ font-size:22px; }
+
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="invitation">
+
+
+<!-- 🎀 RIBBON -->
+<div class="ribbon"></div>
+
+<!-- 🎁 GIFT -->
+<div class="gift-overlay" id="gift">
+    <div class="gift-box">🎁</div>
+    <div class="gift-text">Clique pour ouvrir l’invitation</div>
+</div>
+
+<!-- 💌 INVITATION -->
+<div class="invitation" id="invitation">
 
     <div class="family">La famille</div>
-
     <div class="family-name">BENHAMMADI</div>
+    <div class="subtitle">vous invite au mariage de leur fille</div>
 
-    <div class="subtitle">
-        vous invite au mariage de leur fille
-    </div>
+    <div class="bride">Hidayet</div>
 
-    <div class="bride">
-        Hidayet
-    </div>
+    <h2>Le</h2>
+    <div class="date">14.06.2026</div>
 
-    <div class="info-section">
+    <div class="location-name">Laboda</div>
+    <div class="city">Tlemcen</div>
 
-        <h2>Le</h2>
-
-        <div class="date">
-            14.06.2026
-        </div>
-
-        <div class="location-title">
-            Salle des fêtes
-        </div>
-
-        <div class="location-name">
-            Laboda
-        </div>
-
-        <div class="city">
-            Tlemcen
-        </div>
-
-        <!-- Lien cliquable Google Maps -->
-        <a
-            href="https://maps.google.com/?q=Laboda+Tlemcen"
-            target="_blank"
-            class="maps-btn">
-            📍 Voir l'itinéraire
-        </a>
-
-    </div>
+    <a class="maps-btn"
+       href="https://maps.google.com/?q=Laboda+Tlemcen"
+       target="_blank">
+       📍 Voir l'itinéraire
+    </a>
 
     <div class="message">
-        Votre présence sera pour nous un honneur et contribuera
-        à rendre ce moment encore plus mémorable.
+        Votre présence sera pour nous un honneur.
     </div>
 
     <div class="footer">
-        Au plaisir de partager cette journée pleine de bonheur avec vous.
+        Au plaisir de partager ce moment magique.
     </div>
 
 </div>
+
+<!-- 🎶 MUSIC -->
+<audio id="music" src="music.mp3" preload="auto"></audio>
+
+<script>
+
+const gift = document.getElementById("gift");
+const invitation = document.getElementById("invitation");
+const ribbon = document.querySelector(".ribbon");
+const music = document.getElementById("music");
+
+gift.addEventListener("click", () => {
+
+    gift.classList.add("hide");
+    invitation.classList.add("show");
+
+    music.play().catch(()=>{});
+
+/* 🎊 CONFETTI */
+for(let i = 0; i < 80; i++){
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.animationDuration = (2 + Math.random() * 3) + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+}
+
+/* 🌸 PETALS */
+for(let i = 0; i < 50; i++){
+    let p = document.createElement("div");
+    p.className = "petal";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = (4 + Math.random() * 5) + "s";
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 8000);
+}
+
+/* 🎀 RIBBON DISAPPEARS AFTER 3s */
+setTimeout(() => {
+    ribbon.style.opacity = "0";
+}, 3000);
+
+/* 🧹 REMOVE GIFT */
+setTimeout(() => {
+    gift.style.display = "none";
+}, 800);
+
+});
+
+</script>
 
 </body>
 </html>
